@@ -5,11 +5,13 @@
         </picture>
     <h1 align="center"> Joy </h1>
 </p>
-<p align="center" justify="column">
+<p align="center">
 
-![PRS](https://img.shields.io/badge/PR's-✅-red?link=https://github.com/otavioabreu27/Joy/issues)
+![Slack](https://img.shields.io/badge/Slack-join-red?style=for-the-badge&logo=slack&logoColor=white)
 
-![Slack](https://img.shields.io/badge/Slack-join-red?style=for-the-badge&logo=slack&logoColor=white&link=https://join.slack.com/t/novoworkspace-fsh1680/shared_invite/zt-2b37jnxeo-n4IxzhGVYxylSPxWkRucJQ)
+[Click here to join Slack](https://join.slack.com/t/novoworkspace-fsh1680/shared_invite/zt-2b37jnxeo-n4IxzhGVYxylSPxWkRucJQ)
+
+![PR's](https://img.shields.io/badge/Accepting%20PR's-✅-red)
 
 </p>
 
