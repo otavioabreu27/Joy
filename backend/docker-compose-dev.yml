@@ -1,0 +1,109 @@
+version: '3'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    hostname: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "15672:15672"
+    networks:
+      - joy
+
+  registrar1:
+    build:
+      context: ./registrar
+    container_name: registrar1
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+      - PORT=8080
+    networks:
+      - joy
+
+  registrar2:
+    build:
+      context: ./registrar
+    container_name: registrar2
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+      - PORT=8081
+    networks:
+      - joy
+
+  registrar3:
+    build:
+      context: ./registrar
+    container_name: registrar3
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+      - PORT=8082
+    networks:
+      - joy
+  
+  registrar4:
+    build:
+      context: ./registrar
+    container_name: registrar4
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+      - PORT=8083
+    networks:
+      - joy
+  
+  registrar5:
+    build:
+      context: ./registrar
+    container_name: registrar5
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+      - PORT=8084
+    networks:
+      - joy
+
+  registrar6:
+    build:
+      context: ./registrar
+    container_name: registrar6
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+      - PORT=8085
+    networks:
+      - joy
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./wait-for-it.sh:/usr/wait-for-it.sh
+    command: ["./usr/wait-for-it.sh", "registrar1:8080", "--", "nginx", "-g", "daemon off;"]
+    depends_on:
+      - registrar1
+      - registrar2
+      - registrar3
+      - registrar4
+      - registrar5
+      - registrar6
+    networks:
+      - joy
+
+networks:
+  joy:
+    driver: bridge
