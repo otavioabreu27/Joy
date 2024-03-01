@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+  output = "."
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://joy:1234@localhost:3306/joy"
+}
+
+model Clientes {
+  id_cliente Int     @id @default(autoincrement())
+  id_servico Int?
+  token      String? @db.VarChar(255)
+  nome       String? @db.VarChar(255)
+
+  @@unique([id_cliente, token], map: "id_cliente")
+}
+
+model Grupos {
+  id_grupo  Int        @id @default(autoincrement())
+  nome      String?    @db.VarChar(255)
+  descricao String?    @db.Text
+  Servicos  Servicos[]
+
+  @@unique([id_grupo, nome], map: "id_grupo")
+}
+
+model Logs {
+  id_log   Int       @id @unique(map: "id_log") @default(autoincrement())
+  token    String?   @db.VarChar(255)
+  message  String?   @db.Text
+  status   String?   @db.Text
+  datetime DateTime? @db.DateTime(0)
+}
+
+model Servicos {
+  id_servico Int     @id @default(autoincrement())
+  id_grupo   Int?
+  nome       String? @db.VarChar(255)
+  descricao  String? @db.Text
+  Grupos     Grupos? @relation(fields: [id_grupo], references: [id_grupo], onDelete: Restrict, onUpdate: Restrict, map: "Servicos_ibfk_1")
+
+  @@unique([id_servico, nome], map: "id_servico")
+  @@index([id_grupo], map: "id_grupo")
+}
