@@ -1,13 +1,24 @@
-import { Controller, Get, ParseIntPipe, Param, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  ParseIntPipe,
+  Param,
+  Res,
+  Query,
+  Body,
+  Put,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { Servicos } from 'prisma';
+import { CreateServicoDTO } from 'src/dto/CreateServicoDTO';
 import { ServicosService } from 'src/services/servicos.service';
 
-@Controller('/servicos')
+@Controller('/servico')
 export class ServicosController {
   constructor(private readonly servicosService: ServicosService) {}
 
-  @Get('/id/:id_servico')
+  @Get('/:id_servico')
   async getServicoById(
     @Param('id_servico', ParseIntPipe) id_servico: number,
     @Res() res: Response,
@@ -19,7 +30,7 @@ export class ServicosController {
       if (servico) {
         res.status(200).json(servico);
       } else {
-        res.status(204).end();
+        res.status(204).send();
       }
     } catch (e) {
       console.error(`Error fetching servico by ID: ${e.message}`);
@@ -27,9 +38,9 @@ export class ServicosController {
     }
   }
 
-  @Get('/name/:name')
+  @Get('')
   async getServicoByName(
-    @Param('name') name: string,
+    @Query('name') name: string,
     @Res() res: Response,
   ): Promise<void> {
     try {
@@ -39,7 +50,7 @@ export class ServicosController {
       if (servico) {
         res.status(200).json(servico);
       } else {
-        res.status(204);
+        res.status(204).send();
       }
     } catch (e) {
       console.error(`Error fetching servico by name: ${e.message}`);
@@ -47,9 +58,9 @@ export class ServicosController {
     }
   }
 
-  @Get('/id_grupo/:id_grupo')
+  @Get('')
   async getServicoByGrupo(
-    @Param('id_grupo', ParseIntPipe) id_grupo: number,
+    @Query('id_grupo', ParseIntPipe) id_grupo: number,
     @Res() res: Response,
   ): Promise<void> {
     try {
@@ -59,10 +70,51 @@ export class ServicosController {
       if (servico) {
         res.status(200).json(servico);
       } else {
-        res.status(204);
+        res.status(204).send();
       }
     } catch (e) {
       console.error(`Error fetching servico by grupo: ${e.message}`);
+      res.status(500).json({ error: e.message });
+    }
+  }
+
+  @Post('')
+  async createServico(
+    @Body() servico: CreateServicoDTO,
+    @Res() res: Response,
+  ): Promise<void> {
+    try {
+      const created_servico: Servicos | null =
+        await this.servicosService.createServico(servico);
+
+      if (created_servico) {
+        res.status(201).json(created_servico);
+      } else {
+        res.status(204).send();
+      }
+    } catch (e) {
+      console.error(`Error creating servico: ${e.message}`);
+      res.status(500).json({ error: e.message });
+    }
+  }
+
+  @Put('/:id')
+  async updateServico(
+    @Param('id', ParseIntPipe) id_servico: number,
+    @Body() servico: CreateServicoDTO,
+    @Res() res: Response,
+  ): Promise<void> {
+    try {
+      const created_servico: Servicos | null =
+        await this.servicosService.createServico(servico);
+
+      if (created_servico) {
+        res.status(201).json(created_servico);
+      } else {
+        res.status(204).send();
+      }
+    } catch (e) {
+      console.error(`Error creating servico: ${e.message}`);
       res.status(500).json({ error: e.message });
     }
   }

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { Servicos } from '../../prisma';
+import { CreateServicoDTO } from 'src/dto/CreateServicoDTO';
 
 @Injectable()
 export class ServicosService {
@@ -38,5 +39,38 @@ export class ServicosService {
       });
 
     return servicos;
+  }
+
+  async createServico(servico: CreateServicoDTO): Promise<Servicos> | null {
+    const created_servico: Servicos | null = await this.prisma.servicos.create({
+      data: {
+        id_grupo: servico.id_grupo,
+        nome: servico.nome,
+        descricao: servico.descricao,
+      },
+    });
+
+    return created_servico;
+  }
+
+  async updateServico(servico: Servicos): Promise<void> {
+    await this.prisma.servicos.update({
+      where: {
+        id_servico: servico.id_servico,
+      },
+      data: {
+        id_grupo: servico.id_grupo,
+        nome: servico.nome,
+        descricao: servico.descricao,
+      },
+    });
+  }
+
+  async deleteServico(id_servico: number): Promise<Servicos> | null {
+    const servico: Servicos | null = await this.prisma.servicos.delete({
+      where: { id_servico: id_servico },
+    });
+
+    return servico;
   }
 }

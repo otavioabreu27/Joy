@@ -1,4 +1,11 @@
-import { Controller, Get, Param, ParseIntPipe, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Query,
+  Res,
+} from '@nestjs/common';
 import { ClientesService } from '../services/clientes.service';
 import { Response } from 'express';
 import { Clientes } from '../../prisma';
@@ -7,7 +14,7 @@ import { Clientes } from '../../prisma';
 export class ClientesController {
   constructor(private readonly clientesService: ClientesService) {}
 
-  @Get('/id/:id')
+  @Get('/:id')
   async getClienteById(
     @Param('id', ParseIntPipe) id: number,
     @Res() res: Response,
@@ -19,7 +26,7 @@ export class ClientesController {
       if (cliente) {
         res.status(200).json(cliente);
       } else {
-        res.status(204).json(cliente);
+        res.status(204).send();
       }
     } catch (e) {
       console.error(`Error fetching clientes by ID: ${e.message}`);
@@ -27,9 +34,9 @@ export class ClientesController {
     }
   }
 
-  @Get('/name/:name')
+  @Get('')
   async getClienteByName(
-    @Param('name') name: string,
+    @Query('name') name: string,
     @Res() res: Response,
   ): Promise<void> {
     try {
@@ -39,7 +46,7 @@ export class ClientesController {
       if (clientes) {
         res.status(200).json(clientes);
       } else {
-        res.status(204).json(clientes);
+        res.status(204).send();
       }
     } catch (e) {
       console.error(`Error fetching clientes by name: ${e.message}`);
@@ -47,9 +54,9 @@ export class ClientesController {
     }
   }
 
-  @Get('/id_servico/:id_servico')
+  @Get('')
   async getClienteByServicoId(
-    @Param('id_servico', ParseIntPipe) id_servico: number,
+    @Query('id_servico', ParseIntPipe) id_servico: number,
     @Res() res: Response,
   ): Promise<void> {
     try {
@@ -59,7 +66,7 @@ export class ClientesController {
       if (clientes) {
         res.status(200).json(clientes);
       } else {
-        res.status(204).json(clientes);
+        res.status(204).send();
       }
     } catch (e) {
       console.error(`Error fetching clientes by id_servico: ${e.message}`);
